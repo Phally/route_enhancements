@@ -1,0 +1,14 @@
+RouteEnhancement plugin for CakePHP 1.3
+
+This plugin packs two custom Route classes designed to work with GET parameters and other legacy urls.
+
+The first class (QueryStringParseRoute) is a class to parse and route on GET parameters. The second class
+is the RedirectRoute, a route designed to redirect before Controllers are constructed, etc. The
+RedirectRoute extends the QueryStringParseRoute, so you can use those options too with the RedirectRoute.
+
+You will probably only need/use the RedirectRoute.
+
+Installation: http://github.com/Phally/route_enhancements/wiki/Installation
+Usage & Examples: http://github.com/Phally/route_enhancements/wiki/Usage:-RedirectRoute
+
+Have fun!

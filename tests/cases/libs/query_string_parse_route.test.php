@@ -279,6 +279,25 @@ class QueryStringParseRouteTestCase extends CakeTestCase {
 		$this->assertEqual($result, $expectation);
 	}
 
+	public function testParsingGetRoutingWithMissingGetParameter() {
+		Router::connect('/file.php', array('controller' => 'pages', 'action' => ':page'), array('routeClass' => 'QueryStringParseRoute'));
+		$expectation = array(
+			'controller' => 'file.php',
+			'named' => array(
+			),
+			'pass' => array(
+			),
+			'action' => 'index',
+			'plugin' => null
+		);
+		$_GET = array(
+			'url' => '/file.php?section=details',
+			'section' => 'details'
+		);
+		$result = Router::parse('/file.php?section=details');
+		$this->assertEqual($result, $expectation);
+	}
+
 	public function endTest() {
 		$_GET = $this->_GET;
 		Router::reload();

@@ -41,8 +41,8 @@ class QueryStringParseRoute extends CakeRoute {
 
 				// GET routing:
 				foreach($this->defaults as $default => $value) {
-					if (strpos($value, ':') == 0 && isset($_GET[$value = substr($value, 1)])) {
-						if ($this->fails($value, $_GET[$value])) {
+					if (strpos($value, ':') === 0) {
+						if (!isset($_GET[$value = substr($value, 1)]) || $this->fails($value, $_GET[$value])) {
 							return false;
 						}
 						$params[$default] = $_GET[$value];

@@ -42,10 +42,22 @@ class QueryStringParseRoute extends CakeRoute {
 				// GET routing:
 				foreach($this->defaults as $default => $value) {
 					if (strpos($value, ':') === 0) {
+						if (strpos($value, '{')) {
+							list($value, $filter) = explode('{', substr($value, 0, -1));
+						}
 						if (!isset($_GET[$value = substr($value, 1)]) || $this->fails($value, $_GET[$value])) {
 							return false;
 						}
-						$params[$default] = $_GET[$value];
+						if (isset($filter)) {
+							$matches = array();
+							if (preg_match($filter, $_GET[$value], $matches)) {
+								$params[$default] = $matches[1];
+							} else {
+								return false;
+							}
+						} else {
+							$params[$default] = $_GET[$value];
+						}
 						$this->options['ignore'][] = $value;
 					}
 				}

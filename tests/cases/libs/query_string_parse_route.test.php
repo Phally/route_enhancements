@@ -374,6 +374,64 @@ class QueryStringParseRouteTestCase extends CakeTestCase {
 		$this->assertEqual($result, $expectation);
 	}
 
+	public function testExtendedAdvancedParsingGetRoutingWithMultipleMatchesAndSingleParameters() {
+		Router::connect('/file.php', array('controller' => ':page{/([a-z]+)\.[a-z]+/}', 'action' => ':page{/[a-z]+\.([a-z]+)/}'), array('routeClass' => 'QueryStringParseRoute'));
+		$expectation = array(
+			'named' => array(
+			),
+			'pass' => array(
+			),
+			'controller' => 'about',
+			'action' => 'details',
+			'plugin' => null
+		);
+		$_GET = array(
+			'url' => '/file.php?page=about.details',
+			'page' => 'about.details'
+		);
+		$result = Router::parse('/file.php?page=about.details');
+		$this->assertEqual($result, $expectation);
+	}
+
+	public function testExtendedAdvancedParsingGetRoutingWithMultipleMatchesAndMultipleParameters() {
+		Router::connect('/file.php', array('controller' => ':background{/color\-([a-z]+)/}', 'action' => ':page{/[a-z]+\.([a-z]+)\.[a-z]+/}'), array('routeClass' => 'QueryStringParseRoute'));
+		$expectation = array(
+			'named' => array(
+			),
+			'pass' => array(
+			),
+			'controller' => 'green',
+			'action' => 'details',
+			'plugin' => null
+		);
+		$_GET = array(
+			'url' => '/file.php?page=about.details.contact&background=color-green',
+			'page' => 'about.details.contact',
+			'background' => 'color-green'
+		);
+		$result = Router::parse('/file.php?page=about.details.contact&background=color-green');
+		$this->assertEqual($result, $expectation);
+	}
+
+	public function testLengthParsingGetRoutingWithMultipleMatches() {
+		Router::connect('/file.php', array('controller' => 'pages', 'action' => ':page{/[a-z]{5}\.([a-z]{7})\.[a-z]{7}/}'), array('routeClass' => 'QueryStringParseRoute'));
+		$expectation = array(
+			'named' => array(
+			),
+			'pass' => array(
+			),
+			'controller' => 'pages',
+			'action' => 'details',
+			'plugin' => null
+		);
+		$_GET = array(
+			'url' => '/file.php?page=about.details.contact',
+			'page' => 'about.details.contact'
+		);
+		$result = Router::parse('/file.php?page=about.details.contact');
+		$this->assertEqual($result, $expectation);
+	}
+
 	public function endTest() {
 		$_GET = $this->_GET;
 		Router::reload();

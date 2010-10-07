@@ -43,7 +43,9 @@ class QueryStringParseRoute extends CakeRoute {
 				foreach($this->defaults as $default => $value) {
 					if (strpos($value, ':') === 0) {
 						if (strpos($value, '{')) {
-							list($value, $filter) = explode('{', substr($value, 0, -1));
+							$filter = array();
+							preg_match('/(:[a-z0-9]+){(.*)}/i', $value, $filter);
+							list($value, $filter) = array_splice($filter, 1);
 						}
 						if (!isset($_GET[$value = substr($value, 1)]) || $this->fails($value, $_GET[$value])) {
 							return false;
